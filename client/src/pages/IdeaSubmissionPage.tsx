@@ -158,7 +158,7 @@ const IdeaSubmissionPage: React.FC = () => {
                   <div className="flex justify-between items-center px-4 py-2 border-t border-white/10 mt-2">
                     <span className="text-xs text-gray-500 flex items-center gap-1">
                       <Sparkles size={12} className="text-gray-400" />
-                      Powered by Perplexity AI
+                      Powered by IBM Granite
                     </span>
                     <button
                       onClick={handleAnalyzeClick}
@@ -232,7 +232,7 @@ const IdeaSubmissionPage: React.FC = () => {
                       }`}></div>
                     <span className={`text-sm ${step === 'loading_questions' ? 'text-white font-medium' : 'text-gray-500'
                       }`}>
-                      1. Generating Questions (Perplexity AI)
+                      1. Generating Questions (IBM Granite)
                     </span>
                   </motion.div>
 
@@ -249,7 +249,7 @@ const IdeaSubmissionPage: React.FC = () => {
                       }`}></div>
                     <span className={`text-sm ${step === 'refining' ? 'text-white font-medium' : 'text-gray-500'
                       }`}>
-                      2. Refining Idea (Perplexity AI)
+                      2. Refining Idea (IBM Granite)
                     </span>
                   </motion.div>
 
@@ -273,7 +273,7 @@ const IdeaSubmissionPage: React.FC = () => {
 
                 <div className="mt-8 text-center">
                   <p className="text-xs text-gray-500">
-                    💡 Powered by Perplexity's Sonar AI Model
+                    💡 Powered by IBM Granite AI Model
                   </p>
                 </div>
               </motion.div>

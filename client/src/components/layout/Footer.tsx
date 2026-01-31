@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Github, Twitter, Linkedin, Globe, Mail } from 'lucide-react';
+import { Github, Twitter, Linkedin, Globe, Mail } from 'lucide-react';
+import logoImage from '../../assets/images/logo.png';
 
 const Footer: React.FC = () => {
   return (
@@ -14,13 +15,14 @@ const Footer: React.FC = () => {
           {/* Logo & Description */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-white/10 p-2">
-                <Brain className="h-full w-full text-white" />
-              </div>
+              <img
+                src={logoImage}
+                alt="IdeaHub Logo"
+                className="h-8 w-auto object-contain"
+              />
               <div>
-                <span className="text-xl font-black text-white">IdeaHub</span>
                 <div className="text-xs text-gray-500 font-medium">
-                  Powered by Perplexity AI + Tavily
+                  Powered by IBM Granite + Tavily
                 </div>
               </div>
             </div>
@@ -120,7 +122,7 @@ const Footer: React.FC = () => {
         <div className="mt-12 pt-6 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
-              © 2025 IdeaHub. All rights reserved. Built with ❤️ for entrepreneurs.
+              © 2026 IdeaHub. All rights reserved. Built with ❤️ for entrepreneurs.
             </p>
             <div className="flex items-center gap-6 text-sm text-gray-500">
               <span className="flex items-center gap-2">

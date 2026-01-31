@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Brain, Lightbulb, LogIn, UserPlus } from 'lucide-react';
+import { LogIn, UserPlus } from 'lucide-react';
+import logoImage from '../../assets/images/logo.png';
 
 /**
  * A simplified header for unauthenticated pages that doesn't use the useAuth hook
@@ -21,20 +22,14 @@ const SimpleHeader: React.FC = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-white/10 hover:bg-white/20 p-2.5 transition-all duration-300">
-                <Brain className="h-7 w-7 text-white" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-white p-1">
-                <Lightbulb className="h-4 w-4 text-black" />
-              </div>
-            </div>
+            <img
+              src={logoImage}
+              alt="IdeaHub Logo"
+              className="h-10 w-auto object-contain"
+            />
             <div className="flex flex-col">
-              <span className="text-2xl font-black text-white">
-                IdeaHub
-              </span>
               <span className="text-xs text-gray-500 font-medium">
-                Powered by Perplexity AI
+                Powered by IBM Granite
               </span>
             </div>
           </Link>

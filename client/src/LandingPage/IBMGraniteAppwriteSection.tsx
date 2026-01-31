@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom';
 const PerplexityAppwriteSection: React.FC = () => {
   const technologies = [
     {
-      name: 'Perplexity AI',
-      logo: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/perplexity-ai-icon.png',
+      name: 'IBM Granite',
+      logo: 'https://www.ibm.com/brand/experience-guides/developer/b1db1ae501d522a1a4b49613fe07c9f1/01_8-bar-positive.svg',
       description: 'Advanced AI reasoning with state-of-the-art language models.',
-      details: 'Real-time web search and deep research capabilities powered by cutting-edge AI technology.'
+      details: 'Real-time web search and deep research capabilities powered by cutting-edge IBM Granite AI technology.'
     },
     {
       name: 'Appwrite',
@@ -22,7 +22,7 @@ const PerplexityAppwriteSection: React.FC = () => {
   const features = [
     {
       icon: <Zap size={24} />,
-      title: 'Perplexity AI',
+      title: 'IBM Granite AI',
       description: 'Advanced AI models deliver accurate startup insights with real-time data.'
     },
     {
@@ -64,7 +64,7 @@ const PerplexityAppwriteSection: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
-            We've partnered with Perplexity AI and Appwrite to deliver the most powerful startup validation platform available.
+            We've partnered with IBM Granite and Appwrite to deliver the most powerful startup validation platform available.
           </motion.p>
         </div>
 
@@ -141,7 +141,7 @@ const PerplexityAppwriteSection: React.FC = () => {
           </motion.div>
 
           <p className="text-gray-600 text-sm max-w-2xl mx-auto leading-relaxed">
-            By using IdeaHub, you agree to our Terms of Service and Privacy Policy. We use Perplexity AI and Appwrite
+            By using IdeaHub, you agree to our Terms of Service and Privacy Policy. We use IBM Granite and Appwrite
             technologies to provide our services. All data is processed according to our data processing guidelines.
           </p>
         </div>
