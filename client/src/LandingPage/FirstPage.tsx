@@ -94,7 +94,7 @@ const FirstPage: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="font-body text-lg md:text-xl text-gray-400 max-w-3xl leading-relaxed"
           >
-            5 specialized AI agents orchestrated by <span className="text-white font-semibold">IBM watsonx</span> analyze your idea across market size, competition, feasibility, and strategy — delivering investor-ready insights in minutes.
+            Stop juggling 7-8 different tools and consultants. Our <span className="text-white font-semibold">5 specialized AI agents</span> orchestrated by <span className="text-blue-400 font-semibold">IBM watsonx</span> deliver comprehensive market analysis, competitive intelligence, and strategic recommendations — all in one place, in under 3 minutes.
           </motion.p>
 
           {/* CTA Buttons */}
