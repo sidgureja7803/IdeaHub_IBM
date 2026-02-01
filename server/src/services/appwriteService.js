@@ -38,9 +38,9 @@ class AppwriteService {
     this.enabled = true;
 
     // Silently check for required variables (logging handled in index.js)
-    if (!process.env.APPWRITE_API_KEY || 
-        !process.env.APPWRITE_PROJECT_ID || 
-        !process.env.APPWRITE_DATABASE_ID) {
+    if (!process.env.APPWRITE_API_KEY ||
+      !process.env.APPWRITE_PROJECT_ID ||
+      !process.env.APPWRITE_DATABASE_ID) {
       this.enabled = false;
     }
   }
@@ -225,7 +225,7 @@ class AppwriteService {
         {
           ideaId,
           userId: idea.userId,
-          results: resultsData,
+          results: JSON.stringify(resultsData), // Stringify JSON to store as text
           createdAt: new Date().toISOString()
         },
         [
@@ -249,6 +249,14 @@ class AppwriteService {
       return analysisResults;
     } catch (error) {
       console.error('Appwrite Error - Save Analysis Results:', error);
+
+      // If it's a schema error, log helpful message
+      if (error.message.includes('Unknown attribute') || error.message.includes('document_invalid_structure')) {
+        console.error('⚠️  APPWRITE SCHEMA ERROR: The "analysisResults" collection is missing required fields.');
+        console.error('⚠️  Please add a "results" attribute (type: text, size: 65535) to your Appwrite collection.');
+        console.error('⚠️   Analysis will continue but results won\'t be saved to database.');
+      }
+
       throw new Error(`Failed to save analysis results: ${error.message}`);
     }
   }

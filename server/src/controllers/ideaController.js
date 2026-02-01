@@ -106,7 +106,7 @@ const getIdea = async (req, res) => {
       success: true,
       data: {
         idea,
-        analysisResults: analysisResults ? analysisResults.results : null
+        analysisResults: analysisResults ? JSON.parse(analysisResults.results) : null
       }
     });
 
