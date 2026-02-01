@@ -1,29 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { TrendingUp, DollarSign, Users, Target } from 'lucide-react';
-import { Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+import { Users, TrendingUp, Target, Lightbulb } from 'lucide-react';
 
 interface MarketAnalysisProps {
   marketSize: string;
@@ -36,152 +12,142 @@ const MarketAnalysisSection: React.FC<MarketAnalysisProps> = ({
   marketSize,
   growthRate,
   customerNeed,
-  projections = [
-    { year: 2023, value: 2.5 },
-    { year: 2024, value: 2.8 },
-    { year: 2025, value: 3.3 },
-    { year: 2026, value: 3.7 },
-    { year: 2027, value: 3.9 }
-  ]
 }) => {
-  const chartData = {
-    labels: projections.map(p => p.year.toString()),
-    datasets: [
-      {
-        label: 'Market Size (Billions)',
-        data: projections.map(p => p.value),
-        fill: true,
-        borderColor: 'rgb(14, 165, 233)',
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        tension: 0.4,
-        pointRadius: 6,
-        pointBackgroundColor: 'rgb(14, 165, 233)',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-      }
-    ]
-  };
+  // Mock data based on typical backend response structure
+  const targetAudience = [
+    "Young aged 18-35",
+    "Tech-savvy recent graduates",
+    "First-time budgeters/investors",
+    "Savvy millennials and Gen Z users"
+  ];
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
-        borderColor: 'rgba(14, 165, 233, 0.5)',
-        borderWidth: 1,
-        padding: 12,
-        displayColors: false,
-        callbacks: {
-          label: function(context: any) {
-            return `$${context.parsed.y}B`;
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        grid: {
-          color: 'rgba(255, 255, 255, 0.05)',
-          drawBorder: false
-        },
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.5)',
-          callback: function(value: any) {
-            return `$${value}B`;
-          }
-        }
-      },
-      x: {
-        grid: {
-          display: false,
-          drawBorder: false
-        },
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.5)'
-        }
-      }
-    }
-  };
+  const growthDrivers = [
+    "8 of Financial literacy importance young adults",
+    "Gamification and app ubiquity + eco gamif learning",
+    "Demand for personalized goal-driven learning experiences",
+    "Effectiveness of gam in enhancing engagement and retention",
+    "Growing interest in early investing and debt management education"
+  ];
+
+  const competitiveAdvantages = [
+    "Personal learning paths tailored to financial goals and skill levels",
+    "Incentive and real-time progress through interactive features",
+    "Reward offering tangible incentives to sustain user use",
+    "Integration of comprehensive topics including budgeting, debt, saving, investing, retirement, and gamification with real-time progress and feedback-driven",
+    "Leverages mobile-first design and smartphone popularity with accessibility reach",
+    "Differentiation with tailored rewards and comprehensive content updates and feedback-driven"
+  ];
+
+  const recommendations = [
+    "💰 Develop AI-driven algorithms tailored lesson and recommendations",
+    "📱 Incorporate gamification including financial discounts print utilizing or",
+    "🤝 Partner with educational institutions and provide reach",
+    "📈 Mobile first user experience and interface optimization and reach",
+    "🎯 Implement behavior-tracking to continuously refine strategies and"
+  ];
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold mb-2">Market Analysis</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">Market Analysis</h2>
+        <p className="text-sm text-gray-500">Comprehensive market intelligence and insights</p>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-dark-900/50 border border-dark-700 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-accent-emerald/20 flex items-center justify-center">
-              <DollarSign size={20} className="text-accent-emerald" />
-            </div>
-            <span className="text-sm text-dark-400">Market Size</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp size={16} className="text-gray-400" />
+            <span className="text-xs text-gray-500">Market Size</span>
           </div>
-          <p className="text-3xl font-bold text-accent-emerald">{marketSize}</p>
-        </motion.div>
+          <p className="text-xl font-bold text-white">{marketSize}</p>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-dark-900/50 border border-dark-700 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-accent-orange/20 flex items-center justify-center">
-              <TrendingUp size={20} className="text-accent-orange" />
-            </div>
-            <span className="text-sm text-dark-400">Growth Rate</span>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp size={16} className="text-gray-400" />
+            <span className="text-xs text-gray-500">Growth Rate</span>
           </div>
-          <p className="text-3xl font-bold text-accent-orange">{growthRate}</p>
-        </motion.div>
+          <p className="text-xl font-bold text-white">{growthRate}</p>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-dark-900/50 border border-dark-700 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-primary-500/20 flex items-center justify-center">
-              <Target size={20} className="text-primary-400" />
-            </div>
-            <span className="text-sm text-dark-400">Customer Need</span>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Target size={16} className="text-gray-400" />
+            <span className="text-xs text-gray-500">Customer Need</span>
           </div>
-          <p className="text-3xl font-bold text-primary-400">{customerNeed}</p>
-        </motion.div>
+          <p className="text-xl font-bold text-white">{customerNeed}</p>
+        </div>
       </div>
 
-      {/* Market Size Over Time Chart */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-dark-900/50 border border-dark-700 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-2 mb-6">
-          <TrendingUp size={20} className="text-primary-400" />
-          <h3 className="text-xl font-semibold">Market Size Over Time</h3>
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Target Audience */}
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Users size={18} className="text-white" />
+            <h3 className="text-lg font-bold text-white">Target Audience</h3>
+          </div>
+          <ul className="space-y-2">
+            {targetAudience.map((item, index) => (
+              <li key={index} className="flex items-start gap-2 text-sm text-gray-300">
+                <span className="text-gray-600 mt-1">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="h-[300px]">
-          <Line data={chartData} options={chartOptions} />
+
+        {/* Growth Drivers */}
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp size={18} className="text-white" />
+            <h3 className="text-lg font-bold text-white">Growth Drivers</h3>
+          </div>
+          <ul className="space-y-2">
+            {growthDrivers.map((item, index) => (
+              <li key={index} className="flex items-start gap-2 text-sm text-gray-300">
+                <span className="text-gray-600 mt-1">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Competitive Advantages */}
+      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Target size={18} className="text-white" />
+          <h3 className="text-lg font-bold text-white">Competitive Advantages</h3>
+        </div>
+        <ul className="space-y-2">
+          {competitiveAdvantages.map((item, index) => (
+            <li key={index} className="flex items-start gap-2 text-sm text-gray-300">
+              <span className="text-gray-600 mt-1">•</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Recommendations */}
+      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Lightbulb size={18} className="text-yellow-500" />
+          <h3 className="text-lg font-bold text-white">Recommendations</h3>
+        </div>
+        <ul className="space-y-2">
+          {recommendations.map((item, index) => (
+            <li key={index} className="flex items-start gap-2 text-sm text-gray-300">
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
 
 export default MarketAnalysisSection;
-

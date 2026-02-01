@@ -1,85 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { Mail, Lock, User, AlertCircle, Github, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { AlertCircle, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import SimpleHeader from '../../components/layout/SimpleHeader';
 import Footer from '../../components/layout/Footer';
 
 const SignUpPage: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const { register } = useAuth();
-  const navigate = useNavigate();
-
-  const passwordRequirements = [
-    { met: password.length >= 8, text: 'At least 8 characters' },
-    { met: /[A-Z]/.test(password), text: 'One uppercase letter' },
-    { met: /[0-9]/.test(password), text: 'One number' },
-  ];
-
-  // Helper function to check if error is a duplicate email error
-  const isDuplicateEmailError = (errorMessage: string): boolean => {
-    const duplicatePatterns = [
-      'already exists',
-      'already registered',
-      'already taken',
-      'already in use',
-      'duplicate',
-      'email_exists',
-      'user_already_exists',
-      'account exists',
-      'email is already',
-    ];
-    
-    const lowerMessage = errorMessage.toLowerCase();
-    return duplicatePatterns.some(pattern => lowerMessage.includes(pattern));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setEmailError(null);
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    if (!passwordRequirements.every(req => req.met)) {
-      setError('Please meet all password requirements');
-      return;
-    }
-    
-    if (name && email && password) {
-      setIsLoading(true);
-      try {
-        await register(email, password, name);
-        navigate('/my-ideas');
-      } catch (err: any) {
-        const errorMessage = err.message || 'Failed to create account';
-        
-        // Check if it's a duplicate email error
-        if (isDuplicateEmailError(errorMessage)) {
-          setEmailError('An account with this email already exists.');
-        } else {
-          setError(errorMessage);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
 
   const handleGoogleSignUp = async () => {
     try {
@@ -87,7 +15,7 @@ const SignUpPage: React.FC = () => {
       const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID;
       const successUrl = `${window.location.origin}/my-ideas`;
       const failureUrl = `${window.location.origin}/sign-up?error=oauth-failed`;
-      
+
       window.location.href = `${appwriteEndpoint}/account/sessions/oauth2/google?project=${projectId}&success=${successUrl}&failure=${failureUrl}`;
     } catch (err: any) {
       setError('Failed to initialize Google sign-up');
@@ -100,7 +28,7 @@ const SignUpPage: React.FC = () => {
       const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID;
       const successUrl = `${window.location.origin}/my-ideas`;
       const failureUrl = `${window.location.origin}/sign-up?error=oauth-failed`;
-      
+
       window.location.href = `${appwriteEndpoint}/account/sessions/oauth2/github?project=${projectId}&success=${successUrl}&failure=${failureUrl}`;
     } catch (err: any) {
       setError('Failed to initialize GitHub sign-up');
@@ -110,7 +38,7 @@ const SignUpPage: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
       <SimpleHeader />
-      
+
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -118,10 +46,10 @@ const SignUpPage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <div className="bg-dark-900/70 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-dark-700">
+          <div className="bg-gray-900 rounded-lg p-8 border border-gray-800">
             {/* Header */}
             <div className="text-center mb-8">
-              <motion.h1 
+              <motion.h1
                 className="text-3xl font-bold mb-2"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -129,8 +57,8 @@ const SignUpPage: React.FC = () => {
               >
                 Create Account
               </motion.h1>
-              <motion.p 
-                className="text-dark-400"
+              <motion.p
+                className="text-gray-400"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -139,34 +67,27 @@ const SignUpPage: React.FC = () => {
               </motion.p>
             </div>
 
-            {/* Generic Error Message */}
+            {/* Error Message */}
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-3 bg-red-500/20 border border-red-500/50 rounded-lg"
+                className="mb-6 p-3 bg-red-500/20 border border-red-500/50 rounded-lg flex items-center gap-2 text-red-200"
               >
-                <div className="flex items-start gap-2">
-                  <AlertCircle size={18} className="text-red-400 mt-0.5 flex-shrink-0" />
-                  <div className="flex-1">
-                    <p className="text-sm text-red-200">{error}</p>
-                    <p className="text-xs text-red-300/70 mt-1">
-                      If the problem persists, please try signing up with Google or GitHub.
-                    </p>
-                  </div>
-                  <button 
-                    onClick={() => setError(null)}
-                    className="text-dark-400 hover:text-white flex-shrink-0"
-                  >
-                    ✕
-                  </button>
-                </div>
+                <AlertCircle size={18} />
+                <span className="text-sm">{error}</span>
+                <button
+                  onClick={() => setError(null)}
+                  className="ml-auto text-gray-400 hover:text-white"
+                >
+                  ✕
+                </button>
               </motion.div>
             )}
 
             {/* OAuth Buttons */}
-            <motion.div 
-              className="space-y-3 mb-6"
+            <motion.div
+              className="space-y-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -175,7 +96,7 @@ const SignUpPage: React.FC = () => {
                 type="button"
                 variant="outline"
                 onClick={handleGoogleSignUp}
-                className="w-full h-11 bg-dark-800 border-dark-700 hover:bg-dark-700 hover:border-dark-600 text-white"
+                className="w-full h-12 bg-gray-800 border-gray-700 hover:bg-gray-700 hover:border-gray-600 text-white"
               >
                 <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
                   <path
@@ -202,235 +123,33 @@ const SignUpPage: React.FC = () => {
                 type="button"
                 variant="outline"
                 onClick={handleGithubSignUp}
-                className="w-full h-11 bg-dark-800 border-dark-700 hover:bg-dark-700 hover:border-dark-600 text-white"
+                className="w-full h-12 bg-gray-800 border-gray-700 hover:bg-gray-700 hover:border-gray-600 text-white"
               >
                 <Github className="mr-2 h-5 w-5" />
                 Continue with GitHub
               </Button>
             </motion.div>
 
-            {/* Divider */}
-            <motion.div 
-              className="relative mb-6"
+            {/* Footer Links */}
+            <motion.div
+              className="mt-8 text-center space-y-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <Separator className="bg-dark-700" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-dark-900 px-2 text-sm text-dark-400">Or continue with email</span>
-              </div>
-            </motion.div>
-
-            {/* Email/Password Form */}
-            <motion.form 
-              onSubmit={handleSubmit} 
-              className="space-y-4"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-dark-300">
-                  Full Name
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-dark-500" />
-                  </div>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="pl-10 bg-dark-800 border-dark-700 focus:border-primary-500 text-white"
-                    placeholder="John Doe"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-dark-300">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-dark-500" />
-                  </div>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setEmailError(null); // Clear error when user types
-                    }}
-                    className={`pl-10 bg-dark-800 ${
-                      emailError 
-                        ? 'border-red-500 focus:border-red-500' 
-                        : 'border-dark-700 focus:border-primary-500'
-                    } text-white`}
-                    placeholder="you@example.com"
-                  />
-                </div>
-                
-                {/* Inline Email Error */}
-                {emailError && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg"
-                  >
-                    <div className="flex items-start gap-2">
-                      <AlertCircle size={16} className="text-amber-400 mt-0.5 flex-shrink-0" />
-                      <div className="flex-1 text-sm">
-                        <p className="text-amber-200 font-medium mb-1">
-                          {emailError}
-                        </p>
-                        <p className="text-amber-300/80 text-xs mb-2">
-                          You may have previously signed up with Google or GitHub using this email.
-                        </p>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          <Link 
-                            to="/sign-in"
-                            className="inline-flex items-center text-xs font-medium text-amber-300 hover:text-amber-200 underline"
-                          >
-                            Sign in instead →
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={handleGoogleSignUp}
-                            className="inline-flex items-center text-xs font-medium text-amber-300 hover:text-amber-200"
-                          >
-                            Try with Google
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleGithubSignUp}
-                            className="inline-flex items-center text-xs font-medium text-amber-300 hover:text-amber-200"
-                          >
-                            Try with GitHub
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-dark-300">
-                  Password
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-dark-500" />
-                  </div>
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-12 bg-dark-800 border-dark-700 focus:border-primary-500 text-white"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-dark-400 hover:text-white"
-                  >
-                    <span className="text-sm font-medium">{showPassword ? "Hide" : "Show"}</span>
-                  </button>
-                </div>
-                
-                {/* Password Requirements */}
-                {password && (
-                  <div className="space-y-1 mt-2">
-                    {passwordRequirements.map((req, index) => (
-                      <div key={index} className="flex items-center gap-2 text-xs">
-                        <CheckCircle 
-                          size={14} 
-                          className={req.met ? 'text-accent-emerald' : 'text-dark-600'}
-                        />
-                        <span className={req.met ? 'text-accent-emerald' : 'text-dark-500'}>
-                          {req.text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-dark-300">
-                  Confirm Password
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-dark-500" />
-                  </div>
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10 bg-dark-800 border-dark-700 focus:border-primary-500 text-white"
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-11 bg-primary-600 hover:bg-primary-700 mt-6"
-              >
-                {isLoading ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Creating account...
-                  </span>
-                ) : (
-                  <span>Create Account</span>
-                )}
-              </Button>
-            </motion.form>
-
-            {/* Footer Links */}
-            <motion.div 
-              className="mt-8 text-center space-y-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              <p className="text-dark-400 text-sm">
+              <p className="text-gray-400 text-sm">
                 Already have an account?{' '}
-                <Link to="/sign-in" className="text-primary-400 hover:text-primary-300 font-medium">
+                <Link to="/sign-in" className="text-blue-400 hover:text-blue-300 font-medium">
                   Sign in
                 </Link>
               </p>
-              <p className="text-xs text-dark-500">
+              <p className="text-xs text-gray-500">
                 By creating an account, you agree to our{' '}
-                <Link to="/terms" className="text-primary-400 hover:underline">Terms</Link>
+                <Link to="/terms" className="text-blue-400 hover:underline">Terms</Link>
                 {' '}and{' '}
-                <Link to="/privacy" className="text-primary-400 hover:underline">Privacy Policy</Link>
+                <Link to="/privacy" className="text-blue-400 hover:underline">Privacy Policy</Link>
               </p>
-              <Link to="/" className="text-dark-400 hover:text-white text-sm inline-block">
+              <Link to="/" className="text-gray-400 hover:text-white text-sm inline-block">
                 ← Back to Home
               </Link>
             </motion.div>
@@ -444,4 +163,3 @@ const SignUpPage: React.FC = () => {
 };
 
 export default SignUpPage;
-

@@ -1,51 +1,21 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { Mail, Lock, LogIn, AlertCircle, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { AlertCircle, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import SimpleHeader from '../../components/layout/SimpleHeader';
 import Footer from '../../components/layout/Footer';
 
 const SignInPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    
-    if (email && password) {
-      setIsLoading(true);
-      try {
-        await login(email, password);
-        navigate('/my-ideas');
-      } catch (err: any) {
-        setError(err.message || 'Failed to sign in. Please check your credentials.');
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
 
   const handleGoogleSignIn = async () => {
-    // Implement Google OAuth
-    // This will redirect to Appwrite OAuth endpoint
     try {
-      // Using Appwrite OAuth
       const appwriteEndpoint = import.meta.env.VITE_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1';
       const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID;
       const successUrl = `${window.location.origin}/my-ideas`;
       const failureUrl = `${window.location.origin}/sign-in?error=oauth-failed`;
-      
+
       window.location.href = `${appwriteEndpoint}/account/sessions/oauth2/google?project=${projectId}&success=${successUrl}&failure=${failureUrl}`;
     } catch (err: any) {
       setError('Failed to initialize Google sign-in');
@@ -53,13 +23,12 @@ const SignInPage: React.FC = () => {
   };
 
   const handleGithubSignIn = async () => {
-    // Implement GitHub OAuth
     try {
       const appwriteEndpoint = import.meta.env.VITE_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1';
       const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID;
       const successUrl = `${window.location.origin}/my-ideas`;
       const failureUrl = `${window.location.origin}/sign-in?error=oauth-failed`;
-      
+
       window.location.href = `${appwriteEndpoint}/account/sessions/oauth2/github?project=${projectId}&success=${successUrl}&failure=${failureUrl}`;
     } catch (err: any) {
       setError('Failed to initialize GitHub sign-in');
@@ -69,7 +38,7 @@ const SignInPage: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
       <SimpleHeader />
-      
+
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -77,10 +46,10 @@ const SignInPage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <div className="bg-dark-900/70 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-dark-700">
+          <div className="bg-gray-900 rounded-lg p-8 border border-gray-800">
             {/* Header */}
             <div className="text-center mb-8">
-              <motion.h1 
+              <motion.h1
                 className="text-3xl font-bold mb-2"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -88,8 +57,8 @@ const SignInPage: React.FC = () => {
               >
                 Welcome Back
               </motion.h1>
-              <motion.p 
-                className="text-dark-400"
+              <motion.p
+                className="text-gray-400"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -107,9 +76,9 @@ const SignInPage: React.FC = () => {
               >
                 <AlertCircle size={18} />
                 <span className="text-sm">{error}</span>
-                <button 
+                <button
                   onClick={() => setError(null)}
-                  className="ml-auto text-dark-400 hover:text-white"
+                  className="ml-auto text-gray-400 hover:text-white"
                 >
                   ✕
                 </button>
@@ -117,8 +86,8 @@ const SignInPage: React.FC = () => {
             )}
 
             {/* OAuth Buttons */}
-            <motion.div 
-              className="space-y-3 mb-6"
+            <motion.div
+              className="space-y-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -127,7 +96,7 @@ const SignInPage: React.FC = () => {
                 type="button"
                 variant="outline"
                 onClick={handleGoogleSignIn}
-                className="w-full h-11 bg-dark-800 border-dark-700 hover:bg-dark-700 hover:border-dark-600 text-white"
+                className="w-full h-12 bg-gray-800 border-gray-700 hover:bg-gray-700 hover:border-gray-600 text-white"
               >
                 <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
                   <path
@@ -154,121 +123,27 @@ const SignInPage: React.FC = () => {
                 type="button"
                 variant="outline"
                 onClick={handleGithubSignIn}
-                className="w-full h-11 bg-dark-800 border-dark-700 hover:bg-dark-700 hover:border-dark-600 text-white"
+                className="w-full h-12 bg-gray-800 border-gray-700 hover:bg-gray-700 hover:border-gray-600 text-white"
               >
                 <Github className="mr-2 h-5 w-5" />
                 Continue with GitHub
               </Button>
             </motion.div>
 
-            {/* Divider */}
-            <motion.div 
-              className="relative mb-6"
+            {/* Footer Links */}
+            <motion.div
+              className="mt-8 text-center space-y-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <Separator className="bg-dark-700" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-dark-900 px-2 text-sm text-dark-400">Or continue with email</span>
-              </div>
-            </motion.div>
-
-            {/* Email/Password Form */}
-            <motion.form 
-              onSubmit={handleSubmit} 
-              className="space-y-5"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-dark-300">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-dark-500" />
-                  </div>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-dark-800 border-dark-700 focus:border-primary-500 text-white"
-                    placeholder="you@example.com"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-dark-300">
-                  Password
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-dark-500" />
-                  </div>
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-12 bg-dark-800 border-dark-700 focus:border-primary-500 text-white"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-dark-400 hover:text-white"
-                  >
-                    <span className="text-sm font-medium">{showPassword ? "Hide" : "Show"}</span>
-                  </button>
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-11 bg-primary-600 hover:bg-primary-700"
-              >
-                {isLoading ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Signing in...
-                  </span>
-                ) : (
-                  <span className="flex items-center">
-                    <LogIn className="mr-2 h-5 w-5" />
-                    Sign In
-                  </span>
-                )}
-              </Button>
-            </motion.form>
-
-            {/* Footer Links */}
-            <motion.div 
-              className="mt-8 text-center space-y-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              <p className="text-dark-400 text-sm">
+              <p className="text-gray-400 text-sm">
                 Don't have an account?{' '}
-                <Link to="/sign-up" className="text-primary-400 hover:text-primary-300 font-medium">
+                <Link to="/sign-up" className="text-blue-400 hover:text-blue-300 font-medium">
                   Sign up
                 </Link>
               </p>
-              <Link to="/" className="text-dark-400 hover:text-white text-sm inline-block">
+              <Link to="/" className="text-gray-400 hover:text-white text-sm inline-block">
                 ← Back to Home
               </Link>
             </motion.div>
@@ -282,4 +157,3 @@ const SignInPage: React.FC = () => {
 };
 
 export default SignInPage;
-

@@ -1,6 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { PieChart, Target, TrendingUp } from 'lucide-react';
+import { DollarSign, BarChart3 } from 'lucide-react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -17,29 +16,26 @@ const TAMSAMSection: React.FC<TAMSAMProps> = ({
   tam,
   sam,
   som,
-  segments = [
-    { name: 'Enterprise', description: 'Large organizations with 1000+ employees', value: '45%' },
-    { name: 'SMB', description: 'Small to medium businesses with 50-1000 employees', value: '35%' },
-    { name: 'Startups', description: 'Early-stage companies under 50 employees', value: '20%' }
-  ]
+  segments = []
 }) => {
+  // Professional donut chart configuration
   const chartData = {
     labels: ['TAM', 'SAM', 'SOM'],
     datasets: [
       {
         data: [tam.percentage, sam.percentage, som.percentage],
         backgroundColor: [
-          'rgba(14, 165, 233, 0.8)',
           'rgba(139, 92, 246, 0.8)',
+          'rgba(59, 130, 246, 0.8)',
           'rgba(16, 185, 129, 0.8)'
         ],
         borderColor: [
-          'rgb(14, 165, 233)',
-          'rgb(139, 92, 246)',
-          'rgb(16, 185, 129)'
+          'rgba(139, 92, 246, 1)',
+          'rgba(59, 130, 246, 1)',
+          'rgba(16, 185, 129, 1)'
         ],
         borderWidth: 2,
-        cutout: '70%'
+        cutout: '65%'
       }
     ]
   };
@@ -52,14 +48,14 @@ const TAMSAMSection: React.FC<TAMSAMProps> = ({
         display: false
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
         titleColor: '#fff',
         bodyColor: '#fff',
-        borderColor: 'rgba(14, 165, 233, 0.5)',
+        borderColor: 'rgba(139, 92, 246, 0.5)',
         borderWidth: 1,
         padding: 12,
         callbacks: {
-          label: function(context: any) {
+          label: function (context: any) {
             return `${context.label}: ${context.parsed}%`;
           }
         }
@@ -67,123 +63,113 @@ const TAMSAMSection: React.FC<TAMSAMProps> = ({
     }
   };
 
+  // Mock segment data if not provided
+  const segmentData = segments.length > 0 ? segments : [
+    { name: 'Budgeting Gamified Lessons', description: 'Lessons: 148,247', value: '$0.2B' },
+    { name: 'Goal Management Frameworks', description: 'Lessons: 148,247', value: '$0.1B' },
+    { name: 'Invest Education and Challenges', description: 'Lessons: 148,247', value: '$0.1B' }
+  ];
+
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold mb-2">TAM & SAM</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">TAM/SAM/SOM Analysis</h2>
+        <p className="text-sm text-gray-500">Market size distribution and segments</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Market Size Distribution Chart */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-dark-900/50 border border-dark-700 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-2 mb-6">
-            <PieChart size={20} className="text-primary-400" />
-            <h3 className="text-xl font-semibold">Market Size Distribution</h3>
-          </div>
-          
-          <div className="flex items-center justify-center mb-6">
-            <div className="w-64 h-64">
-              <Doughnut data={chartData} options={chartOptions} />
-            </div>
+      {/* Market Size Distribution */}
+      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+        <div className="flex items-center gap-2 mb-6">
+          <DollarSign size={18} className="text-white" />
+          <h3 className="text-lg font-bold text-white">Market Size Distribution</h3>
+        </div>
+
+        <div className="flex items-center justify-between">
+          {/* Chart */}
+          <div className="w-48 h-48">
+            <Doughnut data={chartData} options={chartOptions} />
           </div>
 
-          <div className="text-center mb-4">
-            <p className="text-sm text-dark-400 mb-2">Market Breakdown</p>
-          </div>
-        </motion.div>
+          {/* Market Breakdown */}
+          <div className="flex-1 ml-8 space-y-4">
+            <p className="text-sm font-bold text-gray-400 mb-4">Market Breakdown</p>
 
-        {/* Market Details */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-4"
-        >
-          {/* TAM */}
-          <div className="bg-dark-900/50 border border-dark-700 rounded-xl p-6">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-3 h-3 rounded-full bg-primary-500"></div>
-                  <h4 className="font-semibold text-lg">TAM</h4>
+            {/* TAM */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                <div>
+                  <p className="text-sm font-medium text-white">TAM</p>
+                  <p className="text-xs text-gray-500">Total Addressable Market ({tam.percentage}%)</p>
                 </div>
-                <p className="text-xs text-dark-400">Total Addressable Market</p>
               </div>
-              <span className="text-xs bg-primary-500/20 text-primary-400 px-2 py-1 rounded">
-                {tam.percentage}%
-              </span>
+              <p className="text-lg font-bold text-white">{tam.value}</p>
             </div>
-            <p className="text-2xl font-bold text-primary-400">{tam.value}</p>
-          </div>
 
-          {/* SAM */}
-          <div className="bg-dark-900/50 border border-dark-700 rounded-xl p-6">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-3 h-3 rounded-full bg-accent-purple"></div>
-                  <h4 className="font-semibold text-lg">SAM</h4>
+            {/* SAM */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <div>
+                  <p className="text-sm font-medium text-white">SAM</p>
+                  <p className="text-xs text-gray-500">Serviceable Addressable Market ({sam.percentage}%)</p>
                 </div>
-                <p className="text-xs text-dark-400">Serviceable Addressable Market</p>
               </div>
-              <span className="text-xs bg-accent-purple/20 text-accent-purple px-2 py-1 rounded">
-                {sam.percentage}%
-              </span>
+              <p className="text-lg font-bold text-white">{sam.value}</p>
             </div>
-            <p className="text-2xl font-bold text-accent-purple">{sam.value}</p>
-          </div>
 
-          {/* SOM */}
-          <div className="bg-dark-900/50 border border-dark-700 rounded-xl p-6">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-3 h-3 rounded-full bg-accent-emerald"></div>
-                  <h4 className="font-semibold text-lg">SOM</h4>
+            {/* SOM */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <div>
+                  <p className="text-sm font-medium text-white">SOM</p>
+                  <p className="text-xs text-gray-500">Serviceable Obtainable Market ({som.percentage}%)</p>
                 </div>
-                <p className="text-xs text-dark-400">Serviceable Obtainable Market</p>
               </div>
-              <span className="text-xs bg-accent-emerald/20 text-accent-emerald px-2 py-1 rounded">
-                {som.percentage}%
-              </span>
+              <p className="text-lg font-bold text-white">{som.value}</p>
             </div>
-            <p className="text-2xl font-bold text-accent-emerald">{som.value}</p>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Market Segments */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-dark-900/50 border border-dark-700 rounded-xl p-6"
-      >
+      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
         <div className="flex items-center gap-2 mb-6">
-          <Target size={20} className="text-primary-400" />
-          <h3 className="text-xl font-semibold">Market Segments</h3>
+          <BarChart3 size={18} className="text-white" />
+          <h3 className="text-lg font-bold text-white">Market Segments</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {segments.map((segment, index) => (
-            <div key={index} className="bg-dark-800/50 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-semibold">{segment.name}</h4>
-                <span className="text-sm font-bold text-primary-400">{segment.value}</span>
+        <div className="mb-4">
+          <p className="text-sm font-bold text-gray-400 mb-1">Segment Breakdown</p>
+        </div>
+
+        <div className="space-y-4">
+          {segmentData.map((segment, index) => (
+            <div key={index} className="flex items-center justify-between border-b border-gray-800 last:border-0 pb-3 last:pb-0">
+              <div className="flex items-center gap-4">
+                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                <div>
+                  <p className="text-sm font-medium text-white">{segment.name}</p>
+                  <p className="text-xs text-gray-500">{segment.description}</p>
+                </div>
               </div>
-              <p className="text-xs text-dark-400">{segment.description}</p>
+              <div className="text-right">
+                <p className="text-sm font-bold text-white">{segment.value}</p>
+                <div className="w-32 h-1.5 bg-gray-800 rounded-full mt-1">
+                  <div
+                    className="h-full bg-blue-500 rounded-full"
+                    style={{ width: `${(100 / (index + 1))}%` }}
+                  ></div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
 
 export default TAMSAMSection;
-
