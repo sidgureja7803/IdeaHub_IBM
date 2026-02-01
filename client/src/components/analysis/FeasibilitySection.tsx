@@ -30,10 +30,10 @@ const FeasibilitySection: React.FC<FeasibilityProps> = ({ data }) => {
 
   const parseFeasibility = (feas: any) => {
     if (typeof feas === 'string') {
-      return { assessment: feas, score: 7 };
+      return { assessment: feas, score: undefined };
     }
     return {
-      score: feas?.score || 7,
+      score: feas?.score,
       assessment: feas?.assessment || feas?.details || 'No details available'
     };
   };
@@ -105,16 +105,20 @@ const FeasibilitySection: React.FC<FeasibilityProps> = ({ data }) => {
                 <Settings size={18} className="text-white" />
                 <h3 className="text-base font-bold text-white">Technical Feasibility</h3>
               </div>
-              <div className={`text-2xl font-bold ${getScoreColor(technical.score)}`}>
-                {technical.score}/10
+              {technical.score !== undefined && (
+                <div className={`text-2xl font-bold ${getScoreColor(technical.score)}`}>
+                  {technical.score}/10
+                </div>
+              )}
+            </div>
+            {technical.score !== undefined && (
+              <div className="mb-4 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${technical.score >= 8 ? 'bg-green-500' : technical.score >= 6 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                  style={{ width: `${technical.score * 10}%` }}
+                />
               </div>
-            </div>
-            <div className="mb-4 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-              <div
-                className={`h-full ${technical.score >= 8 ? 'bg-green-500' : technical.score >= 6 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                style={{ width: `${technical.score * 10}%` }}
-              />
-            </div>
+            )}
             <p className="text-sm text-gray-400 leading-relaxed">{technical.assessment}</p>
           </div>
         )}
@@ -127,16 +131,20 @@ const FeasibilitySection: React.FC<FeasibilityProps> = ({ data }) => {
                 <Settings size={18} className="text-white" />
                 <h3 className="text-base font-bold text-white">Operational Feasibility</h3>
               </div>
-              <div className={`text-2xl font-bold ${getScoreColor(operational.score)}`}>
-                {operational.score}/10
+              {operational.score !== undefined && (
+                <div className={`text-2xl font-bold ${getScoreColor(operational.score)}`}>
+                  {operational.score}/10
+                </div>
+              )}
+            </div>
+            {operational.score !== undefined && (
+              <div className="mb-4 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${operational.score >= 8 ? 'bg-green-500' : operational.score >= 6 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                  style={{ width: `${operational.score * 10}%` }}
+                />
               </div>
-            </div>
-            <div className="mb-4 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-              <div
-                className={`h-full ${operational.score >= 8 ? 'bg-green-500' : operational.score >= 6 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                style={{ width: `${operational.score * 10}%` }}
-              />
-            </div>
+            )}
             <p className="text-sm text-gray-400 leading-relaxed">{operational.assessment}</p>
           </div>
         )}
@@ -149,16 +157,20 @@ const FeasibilitySection: React.FC<FeasibilityProps> = ({ data }) => {
                 <DollarSign size={18} className="text-white" />
                 <h3 className="text-base font-bold text-white">Financial Feasibility</h3>
               </div>
-              <div className={`text-2xl font-bold ${getScoreColor(financial.score)}`}>
-                {financial.score}/10
+              {financial.score !== undefined && (
+                <div className={`text-2xl font-bold ${getScoreColor(financial.score)}`}>
+                  {financial.score}/10
+                </div>
+              )}
+            </div>
+            {financial.score !== undefined && (
+              <div className="mb-4 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${financial.score >= 8 ? 'bg-green-500' : financial.score >= 6 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                  style={{ width: `${financial.score * 10}%` }}
+                />
               </div>
-            </div>
-            <div className="mb-4 h-1.5 bg-gray-800 rounded-full overflow-hidden">
-              <div
-                className={`h-full ${financial.score >= 8 ? 'bg-green-500' : financial.score >= 6 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                style={{ width: `${financial.score * 10}%` }}
-              />
-            </div>
+            )}
             <p className="text-sm text-gray-400 leading-relaxed">{financial.assessment}</p>
           </div>
         )}

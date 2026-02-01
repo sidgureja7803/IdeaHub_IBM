@@ -63,13 +63,6 @@ const TAMSAMSection: React.FC<TAMSAMProps> = ({
     }
   };
 
-  // Mock segment data if not provided
-  const segmentData = segments.length > 0 ? segments : [
-    { name: 'Budgeting Gamified Lessons', description: 'Lessons: 148,247', value: '$0.2B' },
-    { name: 'Goal Management Frameworks', description: 'Lessons: 148,247', value: '$0.1B' },
-    { name: 'Invest Education and Challenges', description: 'Lessons: 148,247', value: '$0.1B' }
-  ];
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -146,7 +139,7 @@ const TAMSAMSection: React.FC<TAMSAMProps> = ({
         </div>
 
         <div className="space-y-4">
-          {segmentData.map((segment, index) => (
+          {segments.map((segment, index) => (
             <div key={index} className="flex items-center justify-between border-b border-gray-800 last:border-0 pb-3 last:pb-0">
               <div className="flex items-center gap-4">
                 <div className="w-2 h-2 rounded-full bg-blue-500"></div>

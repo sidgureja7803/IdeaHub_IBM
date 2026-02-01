@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Loader2, Sparkles, Lightbulb } from 'lucide-react';
+import { ArrowRight, Loader2, Sparkles } from 'lucide-react';
 import { ideaRefinerService } from '../services/IdeaRefinerService';
 import { ideaService } from '../services/appwrite';
 import { useAuth } from '../context/AuthContext';
@@ -18,13 +18,6 @@ const IdeaSubmissionPage: React.FC = () => {
   const [refinedPrompt, setRefinedPrompt] = useState('');
   const [loadingText, setLoadingText] = useState('');
   const [error, setError] = useState<string | null>(null);
-
-  const sampleIdeas = [
-    "A SaaS platform for colleges to manage event attendance with QR codes",
-    "AI-powered career coaching for remote workers",
-    "Eco-friendly packaging subscription for small businesses",
-    "Virtual reality meditation retreats for stress relief"
-  ];
 
   const handleAnalyzeClick = async () => {
     if (!idea.trim()) return;
@@ -167,31 +160,6 @@ const IdeaSubmissionPage: React.FC = () => {
                     >
                       Analyze <ArrowRight size={16} />
                     </button>
-                  </div>
-                </div>
-
-                {/* Sample Ideas */}
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <Sparkles size={20} className="text-gray-400" />
-                    <p className="text-sm text-gray-400">Need inspiration? Try one of these:</p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {sampleIdeas.map((sampleIdea, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setIdea(sampleIdea)}
-                        className="text-left p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all group"
-                      >
-                        <div className="flex items-start gap-2">
-                          <Lightbulb size={16} className="text-gray-500 mt-0.5 flex-shrink-0" />
-                          <p className="text-sm text-gray-400 group-hover:text-white transition-colors">
-                            {sampleIdea}
-                          </p>
-                        </div>
-                      </button>
-                    ))}
                   </div>
                 </div>
               </motion.div>
