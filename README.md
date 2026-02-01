@@ -7,7 +7,7 @@
 
 ## 🏆 Built for IBM watsonx AI Hackathon
 
-**IdeaHub** is an official submission for the [**IBM watsonx AI Hackathon (January 2026)**](https://0126hackathon.watsonx-challenge.ibm.com/) — showcasing enterprise-grade multi-agent AI systems powered by IBM's cutting-edge AI orchestration platform.
+**IdeaHub** is an official submission for the [**IBM Dev Day AI Demystified Hackathon)**](https://0126hackathon.watsonx-challenge.ibm.com/) — showcasing enterprise-grade multi-agent AI systems powered by IBM's cutting-edge AI orchestration platform.
 
 ### 🎯 Hackathon Highlights
 
@@ -17,7 +17,7 @@
 - ✅ **Real-Time Intelligence**: Tavily-powered market research integrated with IBM AI
 - ✅ **Production-Ready**: Built with enterprise security, scalability, and reliability
 
-**Event**: IBM watsonx AI Hackathon | January 26, 2026  
+**Event**: IBM watsonx AI Hackathon | January 29, 2026  
 **Official Link**: https://0126hackathon.watsonx-challenge.ibm.com/  
 **Tech Stack**: IBM watsonx.orchestrate, IBM Granite 3.0, Appwrite, React + TypeScript
 

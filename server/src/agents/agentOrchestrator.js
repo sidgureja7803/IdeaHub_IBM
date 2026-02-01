@@ -1,7 +1,7 @@
 /**
  * Agent Orchestrator
  * Coordinates all 5 specialized agents for comprehensive startup analysis
- * using IBM Granite + Tavily
+ * using Perplexity AI for all AI operations and web research
  */
 
 import marketAnalystAgent from './marketAnalystAgent.js';
@@ -70,27 +70,57 @@ class AgentOrchestrator {
         console.log('[Orchestrator] Running agents sequentially...');
 
         // 1. Market Analyst
-        console.log('[Orchestrator] Running Market Analyst...');
-        results.agents.marketAnalysis = await this.agents.marketAnalyst.analyze(ideaData);
+        try {
+            console.log('[Orchestrator] Running Market Analyst...');
+            results.agents.marketAnalysis = await this.agents.marketAnalyst.analyze(ideaData);
+            console.log('[Orchestrator] ✅ Market Analyst complete');
+        } catch (error) {
+            console.error('[Orchestrator] ❌ Market Analyst failed:', error.message);
+            results.agents.marketAnalysis = { error: error.message, status: 'failed' };
+        }
 
         // 2. TAM/SAM Estimator
-        console.log('[Orchestrator] Running TAM/SAM Estimator...');
-        results.agents.tamSamEstimation = await this.agents.tamSamEstimator.estimate(ideaData);
+        try {
+            console.log('[Orchestrator] Running TAM/SAM Estimator...');
+            results.agents.tamSamEstimation = await this.agents.tamSamEstimator.estimate(ideaData);
+            console.log('[Orchestrator] ✅ TAM/SAM Estimator complete');
+        } catch (error) {
+            console.error('[Orchestrator] ❌ TAM/SAM Estimator failed:', error.message);
+            results.agents.tamSamEstimation = { error: error.message, status: 'failed' };
+        }
 
         // 3. Competitor Scanner
-        console.log('[Orchestrator] Running Competitor Scanner...');
-        results.agents.competitorAnalysis = await this.agents.competitorScanner.scan(ideaData);
+        try {
+            console.log('[Orchestrator] Running Competitor Scanner...');
+            results.agents.competitorAnalysis = await this.agents.competitorScanner.scan(ideaData);
+            console.log('[Orchestrator] ✅ Competitor Scanner complete');
+        } catch (error) {
+            console.error('[Orchestrator] ❌ Competitor Scanner failed:', error.message);
+            results.agents.competitorAnalysis = { error: error.message, status: 'failed' };
+        }
 
         // 4. Feasibility Evaluator
-        console.log('[Orchestrator] Running Feasibility Evaluator...');
-        results.agents.feasibilityEvaluation = await this.agents.feasibilityEvaluator.evaluate(ideaData);
+        try {
+            console.log('[Orchestrator] Running Feasibility Evaluator...');
+            results.agents.feasibilityEvaluation = await this.agents.feasibilityEvaluator.evaluate(ideaData);
+            console.log('[Orchestrator] ✅ Feasibility Evaluator complete');
+        } catch (error) {
+            console.error('[Orchestrator] ❌ Feasibility Evaluator failed:', error.message);
+            results.agents.feasibilityEvaluation = { error: error.message, status: 'failed' };
+        }
 
         // 5. Strategy Recommender (uses results from other agents)
-        console.log('[Orchestrator] Running Strategy Recommender...');
-        results.agents.strategyRecommendation = await this.agents.strategyRecommender.recommend(
-            ideaData,
-            results.agents
-        );
+        try {
+            console.log('[Orchestrator] Running Strategy Recommender...');
+            results.agents.strategyRecommendation = await this.agents.strategyRecommender.recommend(
+                ideaData,
+                results.agents
+            );
+            console.log('[Orchestrator] ✅ Strategy Recommender complete');
+        } catch (error) {
+            console.error('[Orchestrator] ❌ Strategy Recommender failed:', error.message);
+            results.agents.strategyRecommendation = { error: error.message, status: 'failed' };
+        }
     }
 
     /**

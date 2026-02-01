@@ -1,15 +1,13 @@
 /**
  * Feasibility Evaluator Agent
- * Assesses technical, operational, and financial viability using IBM Granite + Tavily
+ * Assesses technical, operational, and financial viability using Perplexity AI
  */
 
 import aiClient from '../services/aiClient.js';
-import { TavilySearchTool } from '../retrieval/tavily.js';
 
 class FeasibilityEvaluatorAgent {
     constructor() {
-        this.ibmClient = aiClient;
-        this.tavilyClient = new TavilySearchTool();
+        this.aiClient = aiClient;
     }
 
     /**
@@ -24,7 +22,7 @@ class FeasibilityEvaluatorAgent {
             // Gather feasibility data using Tavily
             const feasibilityData = await this._gatherFeasibilityData(ideaData);
 
-            // Evaluate using IBM Granite
+            // Evaluate using Perplexity AI
             const evaluation = await this._evaluateWithGranite(ideaData, feasibilityData);
 
             return {
@@ -49,40 +47,48 @@ class FeasibilityEvaluatorAgent {
     }
 
     /**
-     * Gather feasibility data using Tavily
+     * Gather feasibility data using Perplexity AI
      * @private
      */
     async _gatherFeasibilityData(ideaData) {
-        if (!this.tavilyClient.isEnabled()) {
+        if (!this.aiClient.isEnabled()) {
             return { enabled: false, results: [] };
         }
 
         try {
-            const searchQuery = `${ideaData.description} technical requirements costs implementation challenges`;
-            const results = await this.tavilyClient.search(searchQuery, { 
-                maxResults: 5,
-                agentType: 'feasibilityEvaluator'
+            // Use Perplexity AI with web search to gather real-time feasibility insights
+            const searchQuery = `${ideaData.description} technical requirements costs implementation challenges feasibility risks`;
+
+            const systemPrompt = `You are a technical and business feasibility researcher. Search the web for information about technical requirements, implementation costs, challenges, and feasibility factors for this startup idea.`;
+
+            const userPrompt = `Research feasibility for this startup: "${ideaData.description}"
+            
+Provide 3-5 key insights about:
+1. Technical requirements and complexity
+2. Implementation costs and timelines
+3. Common challenges and risks
+4. Required skills and resources
+
+Format as brief bullet points with specific details.`;
+
+            const response = await this.aiClient.chat(systemPrompt, userPrompt, {
+                maxTokens: 1000,
+                temperature: 0.3
             });
 
             return {
                 enabled: true,
-                results: results || [],
+                results: [{ title: 'Feasibility Research', snippet: response }],
                 query: searchQuery
             };
         } catch (error) {
-            console.error('[FeasibilityEvaluator] Tavily search error:', error);
-            
-            // If it's a Tavily API key error, propagate it
-            if (error.code === 'TAVILY_API_KEY_INVALID' || error.name === 'TavilyAPIKeyError') {
-                throw error;
-            }
-            
+            console.error('[FeasibilityEvaluator] Perplexity search error:', error);
             return { enabled: true, error: error.message, results: [] };
         }
     }
 
     /**
-     * Evaluate feasibility using IBM Granite
+     * Evaluate feasibility using Perplexity AI
      * @private
      */
     async _evaluateWithGranite(ideaData, feasibilityData) {
@@ -124,7 +130,7 @@ Provide evaluation in JSON format:
             });
         }
 
-        const response = await this.ibmClient.generateText(
+        const response = await this.aiClient.generateText(
             { systemPrompt, userPrompt },
             { temperature: 0.2, maxTokens: 2000 }
         );

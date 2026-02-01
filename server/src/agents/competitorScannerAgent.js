@@ -1,15 +1,13 @@
 /**
  * Competitor Scanner Agent
- * Maps competitors, emerging players, and market gaps using IBM Granite + Tavily
+ * Maps competitors, emerging players, and market gaps using Perplexity AI
  */
 
 import aiClient from '../services/aiClient.js';
-import { TavilySearchTool } from '../retrieval/tavily.js';
 
 class CompetitorScannerAgent {
     constructor() {
-        this.ibmClient = aiClient;
-        this.tavilyClient = new TavilySearchTool();
+        this.aiClient = aiClient;
     }
 
     /**
@@ -24,7 +22,7 @@ class CompetitorScannerAgent {
             // Gather competitor data using Tavily
             const competitorData = await this._gatherCompetitorData(ideaData);
 
-            // Analyze competitors using IBM Granite
+            // Analyze competitors using Perplexity AI
             const analysis = await this._analyzeWithGranite(ideaData, competitorData);
 
             return {
@@ -48,40 +46,49 @@ class CompetitorScannerAgent {
     }
 
     /**
-     * Gather competitor data using Tavily
+     * Gather competitor data using Perplexity AI
      * @private
      */
     async _gatherCompetitorData(ideaData) {
-        if (!this.tavilyClient.isEnabled()) {
+        if (!this.aiClient.isEnabled()) {
             return { enabled: false, results: [] };
         }
 
         try {
-            const searchQuery = `${ideaData.description} competitors startups companies market players`;
-            const results = await this.tavilyClient.search(searchQuery, { 
-                maxResults: 8,
-                agentType: 'competitorScanner'
+            const searchQuery = `${ideaData.description} competitors startups companies market players alternatives`;
+            console.log('[CompetitorScanner] Researching competitors with Perplexity:', searchQuery);
+
+            const systemPrompt = `You are a competitive intelligence analyst. Search the web for competitors, similar companies, and market players in this space.`;
+
+            const userPrompt = `Research competitors for: "${ideaData.description}"
+
+Provide detailed information about:
+- Direct competitors (companies doing exactly the same thing)
+- Indirect competitors (alternative solutions)
+- Emerging players and startups
+- Market leaders and their strengths/weaknesses
+- Market gaps and opportunities
+
+Include specific company names and details.`;
+
+            const response = await this.aiClient.chat(systemPrompt, userPrompt, {
+                maxTokens: 1500,
+                temperature: 0.3
             });
 
             return {
                 enabled: true,
-                results: results || [],
+                results: [{ title: 'Competitor Research', snippet: response }],
                 query: searchQuery
             };
         } catch (error) {
-            console.error('[CompetitorScanner] Tavily search error:', error);
-            
-            // If it's a Tavily API key error, propagate it
-            if (error.code === 'TAVILY_API_KEY_INVALID' || error.name === 'TavilyAPIKeyError') {
-                throw error;
-            }
-            
+            console.error('[CompetitorScanner] Perplexity search error:', error);
             return { enabled: true, error: error.message, results: [] };
         }
     }
 
     /**
-     * Analyze competitors using IBM Granite
+     * Analyze competitors using Perplexity AI
      * @private
      */
     async _analyzeWithGranite(ideaData, competitorData) {
@@ -114,7 +121,7 @@ Provide analysis in JSON format:
             });
         }
 
-        const response = await this.ibmClient.generateText(
+        const response = await this.aiClient.generateText(
             { systemPrompt, userPrompt },
             { temperature: 0.3, maxTokens: 2000 }
         );

@@ -48,14 +48,6 @@ const IdeaSubmissionPage: React.FC = () => {
     setError(null);
 
     try {
-      // Check free tier limit
-      const tierInfo = await ideaService.checkFreeTierLimit(user.$id);
-      if (tierInfo.reachedLimit) {
-        setError('Free tier limit reached (maximum 5 ideas). Please delete an existing idea.');
-        setStep('questions');
-        return;
-      }
-
       // Create structured answers from combined text
       const answerList = questions.map((q, i) => ({
         question: q,

@@ -32,6 +32,14 @@ class AIClient {
     }
 
     /**
+     * Alias for isConfigured - used by agents
+     * @returns {boolean} True if API key is set
+     */
+    isEnabled() {
+        return this.isConfigured();
+    }
+
+    /**
      * Call Perplexity API
      */
     async callPerplexity(messages, options = {}) {
@@ -120,6 +128,21 @@ class AIClient {
      */
     async generateStructuredOutput(systemPrompt, userInput, options = {}) {
         return await this.generateText({ systemPrompt, userPrompt: userInput }, options);
+    }
+
+    /**
+     * Chat method - used by agents for web-search enabled queries
+     * @param {string} systemPrompt - System prompt
+     * @param {string} userPrompt - User prompt
+     * @param {object} options - Options
+     * @returns {Promise<string>} Response
+     */
+    async chat(systemPrompt, userPrompt, options = {}) {
+        const messages = [];
+        if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
+        if (userPrompt) messages.push({ role: 'user', content: userPrompt });
+
+        return await this.callPerplexity(messages, options);
     }
 
     /**

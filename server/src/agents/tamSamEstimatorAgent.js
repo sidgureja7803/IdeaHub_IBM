@@ -1,15 +1,13 @@
 /**
  * TAM/SAM Estimator Agent
- * Calculates Total Addressable Market & Serviceable Addressable Market using Perplexity AI + Tavily
+ * Calculates Total Addressable Market & Serviceable Addressable Market using Perplexity AI
  */
 
 import aiClient from '../services/aiClient.js';
-import { TavilySearchTool } from '../retrieval/tavily.js';
 
 class TamSamEstimatorAgent {
     constructor() {
         this.aiClient = aiClient;
-        this.tavilyClient = new TavilySearchTool();
     }
 
     /**
@@ -61,37 +59,43 @@ class TamSamEstimatorAgent {
     }
 
     /**
-     * Gather market size data using Tavily
+     * Gather market size data using Perplexity AI
      * @private
      */
     async _gatherMarketSizeData(ideaData) {
-        if (!this.tavilyClient.isEnabled()) {
-            console.log('[TamSamEstimator] Tavily disabled, skipping web search');
+        if (!this.aiClient.isEnabled()) {
+            console.log('[TamSamEstimator] Perplexity AI disabled, skipping web search');
             return { enabled: false, results: [] };
         }
 
         try {
-            const searchQuery = `${ideaData.description} TAM SAM market size revenue industry report 2024`;
-            console.log('[TamSamEstimator] Searching Tavily:', searchQuery);
+            const searchQuery = `${ideaData.description} TAM SAM market size revenue industry report 2024 2025`;
+            console.log('[TamSamEstimator] Researching market size with Perplexity:', searchQuery);
 
-            const results = await this.tavilyClient.search(searchQuery, {
-                maxResults: 5,
-                agentType: 'tamSamEstimator'
+            const systemPrompt = `You are a market research analyst. Search the web for TAM, SAM, and market size data for this startup idea.`;
+
+            const userPrompt = `Research market size and revenue data for: "${ideaData.description}"
+
+Provide 3-5 specific market statistics including:
+- Total addressable market size (TAM)
+- Industry revenue figures
+- Market growth rates
+- Relevant market segments
+
+Cite specific numbers with sources where possible.`;
+
+            const response = await this.aiClient.chat(systemPrompt, userPrompt, {
+                maxTokens: 1000,
+                temperature: 0.3
             });
 
             return {
                 enabled: true,
-                results: results || [],
+                results: [{ title: 'Market Size Research', snippet: response }],
                 query: searchQuery
             };
         } catch (error) {
-            console.error('[TamSamEstimator] Tavily search error:', error);
-
-            // If it's a Tavily API key error, propagate it
-            if (error.code === 'TAVILY_API_KEY_INVALID' || error.name === 'TavilyAPIKeyError') {
-                throw error;
-            }
-
+            console.error('[TamSamEstimator] Perplexity search error:', error);
             return { enabled: true, error: error.message, results: [] };
         }
     }

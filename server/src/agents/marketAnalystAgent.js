@@ -1,15 +1,13 @@
 /**
  * Market Analyst Agent
- * Identifies market size, growth trends, and target audiences using Perplexity AI + Tavily
+ * Identifies market size, growth trends, and target audiences using Perplexity AI
  */
 
 import aiClient from '../services/aiClient.js';
-import { TavilySearchTool } from '../retrieval/tavily.js';
 
 class MarketAnalystAgent {
     constructor() {
         this.aiClient = aiClient;
-        this.tavilyClient = new TavilySearchTool();
     }
 
     /**
@@ -48,36 +46,43 @@ class MarketAnalystAgent {
     }
 
     /**
-     * Gather market data using Tavily
+     * Gather market data using Perplexity AI
      * @private
      */
     async _gatherMarketData(ideaData) {
-        if (!this.tavilyClient.isEnabled()) {
-            console.log('[MarketAnalyst] Tavily disabled, skipping web search');
+        if (!this.aiClient.isEnabled()) {
+            console.log('[MarketAnalyst] Perplexity AI disabled, skipping web search');
             return { enabled: false, results: [] };
         }
 
         try {
-            const searchQuery = `${ideaData.description} market size growth trends 2024`;
-            const results = await this.tavilyClient.search(searchQuery, {
-                maxResults: 5,
-                agentType: 'marketAnalyst'
+            const searchQuery = `${ideaData.description} market size growth trends 2024 2025 industry analysis`;
+            console.log('[MarketAnalyst] Researching market with Perplexity:', searchQuery);
+
+            const systemPrompt = `You are a market research analyst. Search the web for market data, growth trends, and industry insights for this startup idea.`;
+
+            const userPrompt = `Research market data for: "${ideaData.description}"
+
+Provide comprehensive market insights including:
+- Current market size and growth rates
+- Key market trends and drivers
+- Target audience demographics
+- Industry forecasts and opportunities
+
+Include specific data points and statistics.`;
+
+            const response = await this.aiClient.chat(systemPrompt, userPrompt, {
+                maxTokens: 1200,
+                temperature: 0.3
             });
 
             return {
                 enabled: true,
-                results: results || [],
+                results: [{ title: 'Market Research', snippet: response }],
                 query: searchQuery
             };
         } catch (error) {
-            console.error('[MarketAnalyst] Tavily search error:', error);
-
-            // If it's a Tavily API key error, propagate it
-            if (error.code === 'TAVILY_API_KEY_INVALID' || error.name === 'TavilyAPIKeyError') {
-                throw error;
-            }
-
-            // For other errors, return error info but continue
+            console.error('[MarketAnalyst] Perplexity search error:', error);
             return { enabled: true, error: error.message, results: [] };
         }
     }

@@ -41,10 +41,10 @@ const TermsPage: React.FC = () => {
               IdeaHub cannot and will not be liable for any loss or damage from your failure to comply with this security obligation.
             </p>
 
-            <h2>3. API Usage and Rate Limits</h2>
+            <h2>3. API Usage and Fair Use</h2>
             <p>
-              Our service utilizes IBM Granite for AI functionality, Tavily for market research, and Appwrite for backend services.
-              Free tier users are limited to 5 idea analyses per account. Abuse of the API may result in account suspension.
+              Our service utilizes IBM Granite for AI functionality, Perplexity AI for market research, and Appwrite for backend services.
+              Users can analyze unlimited startup ideas. We ask that you use the service responsibly and avoid abuse or automated scraping.
             </p>
 
             <h2>4. Privacy and Data Usage</h2>
