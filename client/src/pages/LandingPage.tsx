@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import FirstPage from '../LandingPage/FirstPage.tsx';
+import IBMOrchestrateSection from '../LandingPage/IBMOrchestrateSection.tsx';
 import Functionality from '../LandingPage/Functionality.tsx';
 import Agents from '../LandingPage/Agents.tsx';
 import PerplexityAppwriteSection from '../LandingPage/IBMGraniteAppwriteSection.tsx';
@@ -19,6 +20,7 @@ const LandingPage: React.FC = () => {
         transition={{ duration: 0.5 }}
       >
         <FirstPage />
+        <IBMOrchestrateSection />
         <Functionality />
         <Agents />
         <PerplexityAppwriteSection />
