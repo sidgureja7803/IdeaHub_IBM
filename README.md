@@ -5,9 +5,9 @@
 
 ---
 
-## 🏆 Built for lablab.ai x IBM watsonx.orchestrate Hackathon
+## 🏆 Built for IBM watsonx AI Hackathon
 
-**IdeaHub** is participating in the [**Agentic AI Hackathon with IBM watsonx.orchestrate**](https://lablab.ai/event/agentic-ai-hackathon-ibm-watsonx-orchestrate) — showcasing enterprise-grade multi-agent AI systems powered by IBM's cutting-edge AI orchestration platform.
+**IdeaHub** is an official submission for the [**IBM watsonx AI Hackathon (January 2026)**](https://0126hackathon.watsonx-challenge.ibm.com/) — showcasing enterprise-grade multi-agent AI systems powered by IBM's cutting-edge AI orchestration platform.
 
 ### 🎯 Hackathon Highlights
 
@@ -17,8 +17,143 @@
 - ✅ **Real-Time Intelligence**: Tavily-powered market research integrated with IBM AI
 - ✅ **Production-Ready**: Built with enterprise security, scalability, and reliability
 
-**Event Details**: February 2026 | Hosted by lablab.ai  
-**Tech Stack**: IBM watsonx.orchestrate, IBM Granite, Appwrite, React + TypeScript
+**Event**: IBM watsonx AI Hackathon | January 26, 2026  
+**Official Link**: https://0126hackathon.watsonx-challenge.ibm.com/  
+**Tech Stack**: IBM watsonx.orchestrate, IBM Granite 3.0, Appwrite, React + TypeScript
+
+---
+
+## 🤖 IBM watsonx Orchestrate Integration
+
+### How We Built & Integrated 5 AI Agents
+
+IdeaHub leverages **5 specialized AI agents** built on the **IBM watsonx Orchestrate** platform. Each agent is an expert in a specific domain and works together to deliver comprehensive startup validation.
+
+### Agent Architecture on IBM Orchestrate
+
+**Agent Creation Process:**
+
+1. **Built on IBM watsonx Orchestrate Platform**
+   - Each agent created using IBM's **"Build with AI"** feature or manual configuration
+   - Powered by **IBM Granite 3.0** foundation models (GPT-OSS 120B)
+   - Configured with specialized behavior, knowledge sources, and toolsets
+   - Deployed on IBM's secure cloud infrastructure (`eu-de.watson-orchestrate.cloud.ibm.com`)
+
+2. **The 5 Specialized Agents:**
+
+| Agent Name | IBM Orchestrate ID | Purpose | Model |
+|------------|-------------------|---------|-------|
+| **IdeaHub-Market-Analyst** | `03c60314d1ab2717851cbb6666d_c1c` | Market trends, size, opportunities | IBM Granite 3.0 |
+| **IdeaHub-TAM-SAM-Estimator** | `[orchestrate-id]` | Total/serviceable market calculations | IBM Granite 3.0 |
+| **IdeaHub-Competitor-Scanner** | `[orchestrate-id]` | Competitive landscape analysis | IBM Granite 3.0 |
+| **IdeaHub-Feasibility-Evaluator** | `196948a5-1164-48f8-bfee-a3070c531c04` | Technical/operational/financial viability | IBM Granite 3.0 |
+| **IdeaHub-Strategy-Recommender** | `[orchestrate-id]` | Go-to-market strategy & recommendations | IBM Granite 3.0 |
+
+### Website Integration via Embedded Scripts
+
+**Integration Method:**
+
+Each agent can be embedded directly into our website using IBM watsonx Orchestrate's **embedded agent scripts**. This allows real-time communication between our frontend and IBM's AI agents.
+
+**Example Embedded Agent Script:**
+
+```html
+<script>
+  window.wxOConfiguration = {
+    orchestrationID: "03c60314d1ab2717851cbb6666d_c1c",
+    hostURL: "https://eu-de.watson-orchestrate.cloud.ibm.com",
+    rootElementID: "root",
+    deploymentPlatform: "ibmcloud",
+    crn: "crn:v1:bluemix:public:watsonx-orchestrate:eu-de:...",
+    chatOptions: {
+      agentId: "196948a5-1164-48f8-bfee-a3070c531c04",
+      agentEnvironmentId: "0d8f6f1e-7f2b-4b1b-99c3-363aa13db..."
+    }
+  };
+  setTimeout(function () {
+    const script = document.createElement('script');
+    script.src = `${window.wxOConfiguration.hostURL}/wxoLoader.js`;
+    script.addEventListener('load', function () {
+      wxoLoader.init();
+    });
+    document.head.appendChild(script);
+  }, 0);
+</script>
+```
+
+**How It Works:**
+
+1. **Agent Configuration**: Each agent is configured on IBM watsonx Orchestrate with:
+   - Custom behavior prompts defining expertise
+   - IBM Granite 3.0 model selection
+   - Search tools for real-time data access
+   - Structured JSON output format
+
+2. **Backend Orchestration** (`/server/src/agents/agentOrchestrator.js`):
+   - Express.js backend coordinates agent requests
+   - Sends startup idea to each agent sequentially or in parallel
+   - Receives structured JSON responses from IBM Orchestrate API
+   - Aggregates results into comprehensive analysis report
+
+3. **Frontend Display** (`/client/src/components/analysis/`):
+   - React components receive agent outputs via WebSocket
+   - Real-time progress updates as each agent completes
+   - Professional visualization of all 5 agent results
+   - Export functionality for PDF reports
+
+**Workflow:**
+
+```
+User Submits Idea → Frontend (React) 
+                        ↓
+                    Backend API (Express)
+                        ↓
+                IBM watsonx Orchestrate
+                        ↓
+        ┌───────────────┴───────────────┐
+        ↓               ↓               ↓
+   Agent 1         Agent 2-4        Agent 5
+  (Market)      (TAM/SAM/Comp/    (Strategy -
+                 Feasibility)     uses all data)
+        ↓               ↓               ↓
+        └───────────────┬───────────────┘
+                        ↓
+              Aggregated Results (JSON)
+                        ↓
+                Backend Database (Appwrite)
+                        ↓
+          Frontend Display (Real-time Updates)
+```
+
+### Integration Benefits
+
+- ✅ **Enterprise-Grade AI**: IBM Granite 3.0 models ensure accurate, reliable analysis
+- ✅ **Real-Time Processing**: Agents execute in parallel for speed (2-3 min total)
+- ✅ **Scalable Architecture**: IBM's cloud infrastructure handles concurrent requests
+- ✅ **Structured Outputs**: JSON responses enable consistent frontend rendering
+- ✅ **Embedded Capability**: Agents can be embedded directly on any webpage
+- ✅ **Secure Communication**: All requests encrypted and authenticated via IBM Cloud
+
+### Setup & Configuration
+
+**For detailed agent setup instructions**, see: [`IBM_ORCHESTRATE_AGENT_SETUP.md`](./IBM_ORCHESTRATE_AGENT_SETUP.md)
+
+**Environment Variables Required:**
+
+```bash
+# IBM watsonx Orchestrate Configuration
+IBM_WATSONX_API_KEY=your_ibm_api_key
+IBM_WATSONX_URL=https://eu-de.watson-orchestrate.cloud.ibm.com
+IBM_WATSONX_PROJECT_ID=your_project_id
+GRANITE_MODEL_ID=ibm/granite-3.0-8b-instruct
+
+# Agent IDs (from IBM Orchestrate)
+MARKET_ANALYST_AGENT_ID=03c60314d1ab2717851cbb6666d_c1c
+TAM_SAM_AGENT_ID=agent_id_here
+COMPETITOR_AGENT_ID=agent_id_here  
+FEASIBILITY_AGENT_ID=196948a5-1164-48f8-bfee-a3070c531c04
+STRATEGY_AGENT_ID=agent_id_here
+```
 
 ---
 
@@ -436,7 +571,8 @@ IdeaHub_IBM/
 
 **[🚀 Try Live Demo](https://ideahub-ibm.vercel.app)**  
 **[📁 GitHub Repository](https://github.com/sidgureja7803/IdeaHub_IBM)**  
-**[🏆 lablab.ai Hackathon Page](https://lablab.ai/event/agentic-ai-hackathon-ibm-watsonx-orchestrate)**
+**[🏆 IBM watsonx AI Hackathon](https://0126hackathon.watsonx-challenge.ibm.com/)**  
+**[📖 Agent Setup Guide](./IBM_ORCHESTRATE_AGENT_SETUP.md)**
 
 ---
 
@@ -465,4 +601,4 @@ Made with passion for founders — powered by **IBM watsonx.orchestrate**, **IBM
 
 ---
 
-**🏆 Hackathon Entry for: Agentic AI Hackathon with IBM watsonx.orchestrate (lablab.ai - February 2026)**
+**🏆 Official Submission for: [IBM watsonx AI Hackathon (January 26, 2026)](https://0126hackathon.watsonx-challenge.ibm.com/)**

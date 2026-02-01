@@ -60,7 +60,7 @@ const FirstPage: React.FC = () => {
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] text-white">
               Validate Your Startup Idea
               <span className="block mt-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                With Enterprise AI
+                With IBM watsonx Orchestrate
               </span>
             </h1>
           </motion.div>
